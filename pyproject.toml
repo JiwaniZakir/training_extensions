@@ -38,8 +38,7 @@ dependencies = [
     "einops==0.8.1",
     "decord==0.6.0",
     "typeguard>=4.3,<4.5",
-    # TODO(ashwinvaidya17): https://github.com/openvinotoolkit/anomalib/issues/2126
-    "setuptools<70",
+    "setuptools==70.2.0",
     "lightning==2.4.0",
     "torchmetrics==1.6.0",
     "pytorchcv==0.0.67",
@@ -67,11 +66,11 @@ dev = [
     "onnxruntime==1.21.1",
 ]
 
-cuda = ["torch==2.7.0"]
+cuda = ["torch==2.8.0"]
 xpu = [
-    "torch==2.7.0+xpu",
-    "pytorch-triton-xpu==3.3.0",
-    "torchvision==0.22.0+xpu"
+    "torch==2.8.0+xpu",
+    "pytorch-triton-xpu==3.4.0",
+    "torchvision==0.23.0"
 ]
 
 docs = [
@@ -121,7 +120,9 @@ torch = [
 pytorch-triton-xpu = [
     { index = "torch-xpu", extra = "xpu"},
 ]
-
+torchvision = [
+    { index = "torch-xpu", extra = "xpu"}
+]
 
 [[tool.uv.index]]
 name = "torch-cuda"
