@@ -116,15 +116,13 @@ a physical camera requires exclusive access, whereas an IP camera or a topic doe
 | `POST`   | `/api/sinks:import`      | yaml file   | sink id       | Import a sink from file         |
 | `DELETE` | `/api/sinks/<id>`        | -           | -             | Remove a sink                   |
 
+### Task and labels configuration
+
+Refer to the [task management documentation](task.md) for details on how to manage tasks and labels.
+
 ### Model management
 
-| Method    | Path               | Payload              | Return          | Description                          |
-|-----------|--------------------|----------------------|-----------------|--------------------------------------|
-| `POST`    | `/api/models`      | .xml, .bin, metadata | model id        | Upload a new model                   |
-| `GET`     | `/api/models`      | -                    | list of models  | List the available models            |
-| `GET`     | `/api/models/<id>` | -                    | model info      | Get info about a model               |
-| `PATCH`   | `/api/models/<id>` | metadata             | -               | Update metadata of an existing model |
-| `DELETE`  | `/api/models/<id>` | -                    | -               | Remove a model                       |
+Refer to the [model management documentation](model.md) for details on how to manage models, including fine-tuning.
 
 ### Pipeline management
 

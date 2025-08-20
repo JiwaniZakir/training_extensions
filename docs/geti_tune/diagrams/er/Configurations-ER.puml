@@ -21,7 +21,7 @@ table(pipelines) {
   pk(id) : UUID
   fk(source_id) : UUID
   fk(sink_id) : UUID
-  fk(model_id) : UUID
+  fk(task_id) : UUID
   name : VARCHAR(255) UNIQUE NOT NULL
   description : TEXT
   is_running : BOOLEAN DEFAULT FALSE
@@ -40,17 +40,15 @@ table(sinks) {
   updated_at : TIMESTAMP
 }
 
-table(models) {
+table(tasks) {
   pk(id) : UUID
-  name : VARCHAR(255) NOT NULL
-  format : VARCHAR(50) NOT NULL
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+  type: TEXT NOT NULL
+  ...
 }
 
 sources ||--o{ pipelines : "one source can be used by many pipelines"
 sinks ||--o{ pipelines : "one sink can be used by many pipelines"
-pipelines }o--|| models : "one model can be used by many pipelines"
+pipelines ||--|| tasks : "one pipeline addresses one specific task"
 
 note right of sources
   Stores configuration for
@@ -67,8 +65,10 @@ note right of sinks
   for pipeline data
 end note
 
-note right of models
-  Models available for inference
+note right of tasks
+  Machine learning task,
+  namely the definition
+  of the problem to solve
 end note
 
 @enduml

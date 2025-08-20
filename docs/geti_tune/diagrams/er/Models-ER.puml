@@ -1,0 +1,36 @@
+@startuml "Models-ER"
+!define table(x) class x << (T,#FFAAAA) >>
+!define pk(x) <u>x</u>
+!define fk(x) <i>x</i>
+
+table(model_groups) {
+  pk(id) : UUID
+  name : TEXT NOT NULL
+  architecture : TEXT NOT NULL
+  fk(task_id): UUID NOT NULL
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+table(model_revisions) {
+  pk(id) : UUID
+  fk(model_group_id): UUID NOT NULL
+  parent_revision_id : UUID
+  model_status: TEXT NOT NULL
+  training_dataset_id : UUID
+  labels: JSON NOT NULL
+  training_started_at : TIMESTAMP
+  training_finished_at : TIMESTAMP
+  weights_converted_at : TIMESTAMP
+}
+
+table(tasks) {
+  pk(id) : UUID
+  ...
+}
+
+model_groups ||--|{ model_revisions : "Users can train multiple\nrevisions of a model"
+model_groups ||--|| tasks : "All models in a group\n address the same task"
+model_revisions |o--o{ model_revisions : "Revisions can be obtained\n by fine-tuning other\n previous revisions"
+
+@enduml
