@@ -81,6 +81,7 @@ export const Anchor = ({
     const interactiveAnchorProps = {
         style: { cursor },
         fill: dragFrom === null ? fill : 'var(--energy-blue)',
+        stroke: 'none',
         'aria-label': label,
         onPointerUp,
         onPointerMove,

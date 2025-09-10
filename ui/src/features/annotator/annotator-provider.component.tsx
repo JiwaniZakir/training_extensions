@@ -35,10 +35,22 @@ export const AnnotatorProvider = ({
     const handleUpdateAnnotation = (updatedAnnotation: Annotation) => {
         const { id } = updatedAnnotation;
 
-        setAnnotations((prevAnnotations) => [
-            ...prevAnnotations.filter((annotation) => annotation.id !== id),
-            updatedAnnotation,
-        ]);
+        setAnnotations((prevAnnotations) => {
+            let hasAnnotation = false;
+            const newAnnotations = prevAnnotations.map((annotation) => {
+                if (annotation.id === id) {
+                    hasAnnotation = true;
+                    return updatedAnnotation;
+                }
+                return annotation;
+            });
+
+            if (hasAnnotation === false) {
+                newAnnotations.push(updatedAnnotation);
+            }
+
+            return newAnnotations;
+        });
     };
 
     return (

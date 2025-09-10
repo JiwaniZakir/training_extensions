@@ -32,7 +32,7 @@ const boundingBoxAnnotation: Annotation = {
         x: 21,
         y: 21,
         width: 108,
-        height: 108,
+        height: 70,
     },
     labels: [
         {

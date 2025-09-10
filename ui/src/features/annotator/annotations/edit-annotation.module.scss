@@ -1,0 +1,34 @@
+/* For the high-priority element (z-index: 20000) */
+.editAnnotation {
+    pointer-events: auto;
+}
+
+.editAnnotation > * {
+    pointer-events: auto;
+}
+
+/* For the lower priority element (z-index: 1) */
+.inertAnnotation > * {
+    pointer-events: visiblePainted;
+}
+
+/* For the element that should always receive events when overlapped */
+.priorityElement {
+    z-index: 20000;
+    pointer-events: all;
+}
+
+/* For the element that should only receive events when not overlapped */
+.secondaryElement {
+    z-index: 1;
+    pointer-events: none; /* Completely disable pointer events on this element */
+}
+
+.secondaryElement rect {
+    pointer-events: visiblePainted;
+}
+
+/* If you need some parts of the secondary element to still be interactive */
+.secondaryElementInteractiveParts {
+    pointer-events: visiblePainted; /* Re-enable pointer events for specific parts */
+}

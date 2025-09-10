@@ -27,15 +27,7 @@ export const ToolManager = ({ width, height }: ToolManager) => {
     const { shape } = annotation;
 
     if (activeTool === 'selection') {
-        return (
-            <EditBoundingBox
-                key={`bbox-${shape.x}-${shape.y}-${shape.width}-${shape.height}`}
-                annotation={annotation}
-                roi={{ x: 0, y: 0, width, height }}
-                zoom={zoom.scale}
-                updateAnnotation={updateAnnotation}
-            />
-        );
+        // This should render the component for selecting e.g. draw an area and select all annotations inside it
     }
 
     return null;

@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 
+import { useZoom } from '../../../../components/zoom/zoom';
 import { Annotation, Point, RegionOfInterest } from '../../types';
 import { ResizeAnchor } from './resize-anchor.component';
 import { TranslateShape } from './translate-shape.component';
@@ -13,13 +14,13 @@ import classes from './bounding-box-tool.module.scss';
 interface EditBoundingBoxProps {
     annotation: Annotation & { shape: { shapeType: 'rect' } };
     roi: RegionOfInterest;
-    zoom: number;
     updateAnnotation: (annotation: Annotation) => void;
 }
 
 const ANCHOR_SIZE = 8;
 
-export const EditBoundingBox = ({ annotation, roi, zoom, updateAnnotation }: EditBoundingBoxProps) => {
+export const EditBoundingBox = ({ annotation, roi, updateAnnotation }: EditBoundingBoxProps) => {
+    const { scale } = useZoom();
     const [shape, setShape] = useState(annotation.shape);
 
     const onComplete = () => {
@@ -33,7 +34,7 @@ export const EditBoundingBox = ({ annotation, roi, zoom, updateAnnotation }: Edi
     };
 
     const anchorPoints = getBoundingBoxResizePoints({
-        gap: (2 * ANCHOR_SIZE) / zoom,
+        gap: (2 * ANCHOR_SIZE) / scale,
         boundingBox: shape,
         onResized: (boundingBox) => {
             setShape({ ...shape, ...getBoundingBoxInRoi(boundingBox, roi) });
@@ -41,34 +42,19 @@ export const EditBoundingBox = ({ annotation, roi, zoom, updateAnnotation }: Edi
     });
 
     return (
-        <>
-            <svg
-                width={roi.width}
-                height={roi.height}
-                className={classes.disabledLayer}
-                id={`translate-bounding-box-${annotation.id}`}
-            >
-                <TranslateShape
-                    zoom={zoom}
-                    annotation={{ ...annotation, shape }}
-                    translateShape={translate}
-                    onComplete={onComplete}
-                />
-            </svg>
+        <g style={{ zIndex: 2 }}>
+            <TranslateShape
+                zoom={scale}
+                annotation={{ ...annotation, shape }}
+                translateShape={translate}
+                onComplete={onComplete}
+            />
 
-            <svg
-                width={roi.width}
-                height={roi.height}
-                className={classes.disabledLayer}
-                aria-label={`Edit bounding box points ${annotation.id}`}
-                id={`edit-bounding-box-points-${annotation.id}`}
-            >
-                <g style={{ pointerEvents: 'auto' }}>
-                    {anchorPoints.map((anchor) => {
-                        return <ResizeAnchor key={anchor.label} zoom={zoom} onComplete={onComplete} {...anchor} />;
-                    })}
-                </g>
-            </svg>
-        </>
+            <g style={{ pointerEvents: 'auto' }}>
+                {anchorPoints.map((anchor) => {
+                    return <ResizeAnchor key={anchor.label} zoom={scale} onComplete={onComplete} {...anchor} />;
+                })}
+            </g>
+        </g>
     );
 };
