@@ -523,18 +523,18 @@ class OTXEngine(Engine):
         """
         checkpoint = checkpoint if checkpoint is not None else self.checkpoint
 
-        if checkpoint is None:
-            msg = "To make export, checkpoint must be specified."
-            raise RuntimeError(msg)
+        # if checkpoint is None:
+        #     msg = "To make export, checkpoint must be specified."
+        #     raise RuntimeError(msg)
         if export_demo_package and export_format == OTXExportFormatType.ONNX:
             msg = (
                 "ONNX export is not supported in exportable code mode. Exportable code parameter will be disregarded. "
             )
             warn(msg, stacklevel=1)
             export_demo_package = False
-
-        ckpt = self._load_model_checkpoint(checkpoint, map_location="cpu")
-        self.model.load_state_dict(ckpt)
+        if checkpoint is not None:
+            ckpt = self._load_model_checkpoint(checkpoint, map_location="cpu")
+            self.model.load_state_dict(ckpt)
         self.model.eval()
 
         self.model.explain_mode = explain
