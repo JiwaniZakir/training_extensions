@@ -51,11 +51,11 @@ dev = [
     "time-machine~=2.19.0",
 ]
 lint = [
-    "mypy~=1.16.1",
     "ruff==0.11.13",
-    "types-aiofiles~=25.1.0",  # should match aiofiles version
+    "types-aiofiles~=25.1.0", # should match aiofiles version
     "types-requests~=2.32.4",
-    "types-pyyaml~=6.0.12",  # should match pyyaml version
+    "types-pyyaml~=6.0.12", # should match pyyaml version
+    "basedpyright>=1.36.2",
 ]
 
 [tool.uv]
@@ -110,11 +110,12 @@ split-on-trailing-comma = false
 [tool.ruff.lint.pylint]
 max-args=7
 
-[tool.mypy]
-python_version = "3.13"
-ignore_missing_imports = true
-show_error_codes = true
-disable_error_code = ["prop-decorator"] # Ignore error due to https://github.com/python/mypy/issues/14461
+[tool.basedpyright]
+include = ["app", "tests"]
+exclude = ["**/node_modules", "**/__pycache__"]
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+pythonVersion = "3.13"
 
 [tool.pytest.ini_options]
 pythonpath = [
