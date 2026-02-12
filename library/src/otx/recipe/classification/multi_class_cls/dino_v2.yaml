@@ -4,7 +4,7 @@ model:
   init_args:
     label_info: 1000
     model_name: "dinov2-small"
-    peft: ""
+    peft: "dora"
 
     optimizer:
       class_path: torch.optim.AdamW
@@ -21,7 +21,7 @@ model:
           init_args:
             mode: max
             factor: 0.5
-            patience: 3
+            patience: 5
             monitor: val/accuracy
 
 engine:
@@ -34,7 +34,7 @@ data: ../../_base_/data/classification.yaml
 callbacks:
   - class_path: otx.backend.native.callbacks.adaptive_early_stopping.EarlyStoppingWithWarmup
     init_args:
-      patience: 5
+      patience: 8
   - class_path: lightning.pytorch.callbacks.ModelCheckpoint
     init_args:
       dirpath: "" # use engine.work_dir

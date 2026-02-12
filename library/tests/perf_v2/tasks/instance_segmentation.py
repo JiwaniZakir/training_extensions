@@ -15,11 +15,11 @@ from tests.perf_v2.utils import (
 
 from otx.types.task import OTXTaskType
 
-TASK_TYPE = OTXTaskType.INSTANCE_SEGMENTATION
+TASK_TYPE = OTXTaskType.detectionMENTATION
 
 
 MODEL_TEST_CASES = [
-    ModelInfo(task=TASK_TYPE.value, name="maskrcnn_r50_tv", category="other"),
+    ModelInfo(task=TASK_TYPE.value, name="maskrcnn_r50_tv", category="balance"),
     ModelInfo(task=TASK_TYPE.value, name="rfdetr_seg_medium", category="other"),
     ModelInfo(task=TASK_TYPE.value, name="rfdetr_seg_large", category="other"),
     ModelInfo(task=TASK_TYPE.value, name="rfdetr_seg_nano", category="other"),
@@ -34,43 +34,35 @@ DATASET_TEST_CASES = (
     [
         DatasetInfo(
             name=f"blueberry_tiny_{idx}",
-            path=Path("instance_seg/blueberry_tiny_coco") / f"{idx}",
+            path=Path("detection/blueberry_tiny") / f"{idx}",
             group="tiny",
         )
         for idx in (1, 2, 3)
-    ]
-    + [
+    ] +
+    [
         DatasetInfo(
-            name=f"wgisd_tiny_{idx}",
-            path=Path("instance_seg/wgisd_merged_coco_tiny") / f"{idx}",
-            group="tiny",
-        )
-        for idx in (1, 2, 3)
-    ]
-    + [
+            name="wgisd_coco",
+            path=Path("detection/wgisd_merged_coco_small"),
+            group="small",
+        ),
         DatasetInfo(
             name="skindetect",
-            path=Path("instance_seg/skindetect-roboflow"),
+            path=Path("detection/skindetect-roboflow"),
             group="small",
         ),
         DatasetInfo(
             name="vitens_coliform",
-            path=Path("instance_seg/Vitens-Coliform-coco"),
+            path=Path("detection/Vitens-Coliform-coco"),
             group="small",
         ),
         DatasetInfo(
-            name="Vitens-Aeromonas",
-            path=Path("instance_seg/Vitens-Aeromonas-coco"),
-            group="medium",
-        ),
-        DatasetInfo(
             name="Chicken",
-            path=Path("instance_seg/Chicken-Real-Time-coco-roboflow"),
+            path=Path("detection/chicken"),
             group="medium",
         ),
         DatasetInfo(
             name="cityscapes",
-            path=Path("instance_seg/cityscapes_coco_reduced"),
+            path=Path("detection/cityscapes_coco_reduced"),
             group="large",
         ),
     ]
