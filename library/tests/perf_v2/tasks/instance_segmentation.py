@@ -15,7 +15,7 @@ from tests.perf_v2.utils import (
 
 from otx.types.task import OTXTaskType
 
-TASK_TYPE = OTXTaskType.detectionMENTATION
+TASK_TYPE = OTXTaskType.INSTANCE_SEGMENTATION
 
 
 MODEL_TEST_CASES = [

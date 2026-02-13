@@ -69,6 +69,11 @@ DATASET_TEST_CASES = (
             group="small",
         ),
         DatasetInfo(
+            name="chicken",
+            path=Path("detection/chicken"),
+            group="medium",
+        ),
+        DatasetInfo(
             name="bdd_medium",
             path=Path("detection/bdd_medium"),
             group="medium",

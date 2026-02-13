@@ -79,67 +79,67 @@ MULTI_CLASS_DATASET_TEST_CASES = [
     ),
 ]
 
-# # ============= Multi-label classification =============
-# MULTI_LABEL_MODEL_TEST_CASES = [
-#     ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="efficientnet_b0", category="speed"),
-#     ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="efficientnet_v2", category="balance"),
-#     ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="mobilenet_v3_large", category="accuracy"),
-#     ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="deit_tiny", category="other"),
-# ]
+# ============= Multi-label classification =============
+MULTI_LABEL_MODEL_TEST_CASES = [
+    ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="efficientnet_b0", category="speed"),
+    ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="efficientnet_v2", category="balance"),
+    ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="mobilenet_v3_large", category="accuracy"),
+    ModelInfo(task=OTXTaskType.MULTI_LABEL_CLS.value, name="deit_tiny", category="other"),
+]
 
-# MULTI_LABEL_DATASET_TEST_CASES = [
-#     DatasetInfo(
-#         name="multilabel_tiny_bccd",
-#         path=Path("multilabel_classification/mlabel_tiny_bccd_24_6_100"),
-#         group="tiny",
-#     ),
-#     DatasetInfo(
-#         name="multilabel_small_coco",
-#         path=Path("multilabel_classification/mlabel_small_coco_80_20_100"),
-#         group="small",
-#     ),
-#     DatasetInfo(
-#         name="multilabel_medium_edsavehicle",
-#         path=Path("multilabel_classification/mlabel_medium_edsavehicle_600_150_200"),
-#         group="medium",
-#     ),
-#     DatasetInfo(
-#         name="multilabel_large_aid",
-#         path=Path("multilabel_classification/mlabel_large_aid_1000_300_300"),
-#         group="large",
-#     ),
-# ]
-
-
-# # ============= Hierarchical-label classification =============
+MULTI_LABEL_DATASET_TEST_CASES = [
+    DatasetInfo(
+        name="multilabel_tiny_bccd",
+        path=Path("multilabel_classification/mlabel_tiny_bccd_24_6_100"),
+        group="tiny",
+    ),
+    DatasetInfo(
+        name="multilabel_small_coco",
+        path=Path("multilabel_classification/mlabel_small_coco_80_20_100"),
+        group="small",
+    ),
+    DatasetInfo(
+        name="multilabel_medium_edsavehicle",
+        path=Path("multilabel_classification/mlabel_medium_edsavehicle_600_150_200"),
+        group="medium",
+    ),
+    DatasetInfo(
+        name="multilabel_large_aid",
+        path=Path("multilabel_classification/mlabel_large_aid_1000_300_300"),
+        group="large",
+    ),
+]
 
 
-# H_LABEL_CLS_MODEL_TEST_CASES = [
-#     ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="efficientnet_b0", category="speed"),
-#     ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="efficientnet_v2", category="balance"),
-#     ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="mobilenet_v3_large", category="accuracy"),
-#     ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="deit_tiny", category="other"),
-# ]
+# ============= Hierarchical-label classification =============
 
-# H_LABEL_CLS_DATASET_TEST_CASES = [
-#     DatasetInfo(
-#         name="hlabel_tiny_playingcards",
-#         path=Path("hlabel_classification/hlabel_tiny_playingcards-2L-6N_36_20_100"),
-#         group="tiny",
-#     ),
-#     DatasetInfo(
-#         name="hlabel_small_cub",
-#         path=Path("hlabel_classification/hlabel_small_cub-3L-6N_72_24_100"),
-#         group="small",
-#     ),
-#     DatasetInfo(
-#         name="hlabel_medium_stanfordcars",
-#         path=Path("hlabel_classification/hlabel_medium_stanfordcars-26N-3L_350_50_200"),
-#         group="medium",
-#     ),
-#     DatasetInfo(
-#         name="hlabel_large_plantdiseases",
-#         path=Path("hlabel_classification/hlabel_large_plantdiseases-32N-5L_1000_300_300"),
-#         group="large",
-#     ),
-# ]
+
+H_LABEL_CLS_MODEL_TEST_CASES = [
+    ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="efficientnet_b0", category="speed"),
+    ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="efficientnet_v2", category="balance"),
+    ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="mobilenet_v3_large", category="accuracy"),
+    ModelInfo(task=OTXTaskType.H_LABEL_CLS.value, name="deit_tiny", category="other"),
+]
+
+H_LABEL_CLS_DATASET_TEST_CASES = [
+    DatasetInfo(
+        name="hlabel_tiny_playingcards",
+        path=Path("hlabel_classification/hlabel_tiny_playingcards-2L-6N_36_20_100"),
+        group="tiny",
+    ),
+    DatasetInfo(
+        name="hlabel_small_cub",
+        path=Path("hlabel_classification/hlabel_small_cub-3L-6N_72_24_100"),
+        group="small",
+    ),
+    DatasetInfo(
+        name="hlabel_medium_stanfordcars",
+        path=Path("hlabel_classification/hlabel_medium_stanfordcars-26N-3L_350_50_200"),
+        group="medium",
+    ),
+    DatasetInfo(
+        name="hlabel_large_plantdiseases",
+        path=Path("hlabel_classification/hlabel_large_plantdiseases-32N-5L_1000_300_300"),
+        group="large",
+    ),
+]

@@ -471,10 +471,10 @@ class OTXModel(LightningModule):
         if hyper_parameters:
             if ckpt_label_info := hyper_parameters.get("label_info"):
                 self._label_info = self._dispatch_label_info(ckpt_label_info)
-            if ckpt_tile_config := hyper_parameters.get("tile_config"):
-                if isinstance(ckpt_tile_config, dict):
-                    ckpt_tile_config = TileConfig(**ckpt_tile_config)
-                self.tile_config = ckpt_tile_config
+            # if ckpt_tile_config := hyper_parameters.get("tile_config"):
+            #     if isinstance(ckpt_tile_config, dict):
+            #         ckpt_tile_config = TileConfig(**ckpt_tile_config)
+            #     self.tile_config = ckpt_tile_config
 
     def load_state_dict_incrementally(self, ckpt: dict[str, Any], *args, **kwargs) -> None:
         """Load state dict incrementally."""
