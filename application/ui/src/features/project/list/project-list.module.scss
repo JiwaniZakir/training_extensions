@@ -1,3 +1,5 @@
+@use '../../../shared/styles/line-clamp' as lineClamp;
+
 .dialog {
     background-color: var(--spectrum-gray-100);
     background-image: url('./../../../assets/background.png');
@@ -30,6 +32,7 @@
     border: var(--border-size) solid var(--spectrum-global-color-gray-200);
     border-radius: var(--spectrum-global-dimension-size-50);
     background-color: var(--spectrum-global-color-gray-50);
+    height: 100%;
     transition:
         background-color,
         border 0.2s ease-in-out;
@@ -37,8 +40,9 @@
     img {
         width: calc(var(--thumbnail-size) - calc(var(--border-size) * 2));
         object-fit: cover;
-        text-align: center;
-        line-height: calc(var(--thumbnail-size) - calc(var(--border-size) * 2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     &:hover {
@@ -69,4 +73,12 @@
 .activeTag {
     color: var(--spectrum-gray-50);
     background-color: var(--energy-blue) !important;
+}
+
+.projectName {
+    @include lineClamp.clamp(1);
+}
+
+.labelList {
+    @include lineClamp.clamp(3);
 }

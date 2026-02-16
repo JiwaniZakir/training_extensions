@@ -24,7 +24,7 @@ from torchvision.tv_tensors import BoundingBoxFormat
 from otx.backend.native.exporter.base import OTXModelExporter
 from otx.backend.native.exporter.native import OTXNativeModelExporter
 from otx.backend.native.models.base import DataInputParams, DefaultOptimizerCallable, DefaultSchedulerCallable
-from otx.backend.native.models.detection.d_fine import DFine
+from otx.backend.native.models.detection.base import OTXDetectionModel
 from otx.backend.native.models.detection.detectors.rfdetr import RFDETRDetector
 from otx.backend.native.models.detection.utils import limit_batch_objects
 from otx.backend.native.models.utils.utils import load_checkpoint
@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from otx.types.label import LabelInfoTypes
 
 
-class RFDETR(DFine):
+class RFDETR(OTXDetectionModel):
     """OTX Detection model class for RF-DETR.
 
     RF-DETR (Real-time Fast DETR) is a state-of-the-art object detector from Roboflow
@@ -99,7 +99,7 @@ class RFDETR(DFine):
         multi_scale: bool = False,
         torch_compile: bool = False,
         tile_config: TileConfig = TileConfig(enable_tiler=False),
-        max_total_objects_per_batch: int | None = 600,
+        max_total_objects_per_batch: int | None = None,
         gradient_checkpointing: bool = False,
     ) -> None:
         self.multi_scale = multi_scale
@@ -114,7 +114,6 @@ class RFDETR(DFine):
             metric=metric,
             torch_compile=torch_compile,
             tile_config=tile_config,
-            multi_scale=multi_scale,
         )
 
     def _create_model(self, num_classes: int | None = None) -> RFDETRDetector:  # pyrefly: ignore[bad-override]
@@ -244,7 +243,7 @@ class RFDETR(DFine):
 
     def _customize_outputs(  # pyrefly: ignore[bad-override]
         self,
-        outputs: tuple[torch.Tensor, ...] | dict[str, Any],  # type: ignore[override]
+        outputs: tuple[torch.Tensor, ...] | dict[str, Any],
         inputs: OTXSampleBatch,
     ) -> OTXPredictionBatch | OTXBatchLossEntity:
         if self.training:

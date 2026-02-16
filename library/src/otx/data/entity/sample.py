@@ -175,12 +175,13 @@ class DetectionSample(OTXSample):
     def __post_init__(self) -> None:
         # Convert bboxes to tv_tensors format
         shape = (self.dm_image_info.height, self.dm_image_info.width)
-        self.bboxes = tv_tensors.BoundingBoxes(  # pyrefly: ignore[no-matching-overload]
-            self.bboxes,
-            format=tv_tensors.BoundingBoxFormat.XYXY,
-            canvas_size=shape,
-            dtype=torch.float32,
-        )
+        if isinstance(self.bboxes, np.ndarray):
+            self.bboxes = tv_tensors.BoundingBoxes(  # pyrefly: ignore[no-matching-overload]
+                self.bboxes,
+                format=tv_tensors.BoundingBoxFormat.XYXY,
+                canvas_size=shape,
+                dtype=torch.float32,
+            )
 
         self.img_info = ImageInfo(
             img_idx=0,
@@ -222,7 +223,7 @@ class InstanceSegmentationSample(OTXSample):
         shape = (self.dm_image_info.height, self.dm_image_info.width)
         # Convert bboxes to tv_tensors format
         if isinstance(self.bboxes, np.ndarray):
-            self.bboxes = tv_tensors.BoundingBoxes(
+            self.bboxes = tv_tensors.BoundingBoxes(  # pyrefly: ignore[no-matching-overload]
                 self.bboxes,
                 format=tv_tensors.BoundingBoxFormat.XYXY,
                 canvas_size=shape,
