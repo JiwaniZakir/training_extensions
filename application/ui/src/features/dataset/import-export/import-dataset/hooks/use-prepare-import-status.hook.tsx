@@ -4,7 +4,7 @@
 import { useEffect } from 'react';
 
 import { toast } from '@geti/ui';
-import { isEmpty, isFunction } from 'lodash-es';
+import { isEmpty, isError, isFunction } from 'lodash-es';
 
 import { $api } from '../../../../../api/client';
 import { PrepareImportDatasetJob } from '../../../../../constants/shared-types';
@@ -19,6 +19,31 @@ export const usePrepareImportStatus = ({ onError }: UsePrepareImportStatusProps)
     const { getLsPreparingImport, removeLsPreparingImport } = usePrepareImportDataset();
     const { id: jobId, fileName, size } = getLsPreparingImport() ?? {};
 
+    /*     const response = {
+        isError: false,
+        isFetching: false,
+        error: { detail: '' },
+        data: {
+            job_id: '6a57726a-ffe0-49df-acfa-897aca3264b3',
+            job_type: 'prepare_dataset_for_import',
+            metadata: {
+                staged_dataset_id: 'af266078-bca0-41f6-b28b-97a034947d2f',
+                project_id: null,
+                filters: null,
+                labels_mapping: null,
+                subset_mapping: null,
+                project: null,
+            },
+            status: 'DONE',
+            progress: 100,
+            message: 'Completed: Clean up original archive',
+            error: null,
+            started_at: '2026-02-19T15:24:16.721821Z',
+            finished_at: '2026-02-19T15:24:16.744428Z',
+        } as PrepareImportDatasetJob,
+    };
+ */
+
     const response = $api.useQuery(
         'get',
         '/api/jobs/{job_id}',
@@ -31,7 +56,6 @@ export const usePrepareImportStatus = ({ onError }: UsePrepareImportStatusProps)
             },
         }
     );
-
     useEffect(() => {
         if (response.isError && isInvalidJob(response.error)) {
             isFunction(onError) && onError();

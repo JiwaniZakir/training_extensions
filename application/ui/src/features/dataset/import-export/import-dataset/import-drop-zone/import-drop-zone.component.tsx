@@ -58,6 +58,21 @@ export const ImportDropZone = ({ onNextStep }: ImportDropZoneProps) => {
         const formData = new FormData();
         formData.append('file', file);
 
+        /* const stagedDataset = await stagedDatasetMutation.mutateAsync({
+            // @ts-expect-error There is an incorrect type in OpenAPI
+            body: formData,
+        });
+
+        const prepareImportJob = await prepareImportJobMutation.mutateAsync({
+            body: {
+                job_type: 'prepare_dataset_for_import',
+                staged_dataset_id: stagedDataset.id,
+            },
+        }); 
+        addLsPreparingImport('123213', file.name, file.size);
+        
+        */
+
         const stagedDataset = await stagedDatasetMutation.mutateAsync({
             // @ts-expect-error There is an incorrect type in OpenAPI
             body: formData,
