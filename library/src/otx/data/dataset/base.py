@@ -18,9 +18,6 @@ from otx.data.entity.sample import OTXSample, OTXSampleBatch
 from otx.data.transform_libs.torchvision import Compose
 from otx.types import OTXTaskType
 
-if TYPE_CHECKING:
-    from datumaro import Dataset as DmDataset
-
 Transforms = Union[
     Compose, Callable, List[Callable], dict[str, Compose | Callable | List[Callable]], "CPUAugmentationPipeline"
 ]
@@ -143,7 +140,7 @@ class OTXDataset(TorchDataset):
 
     def __init__(
         self,
-        dm_subset: DmDataset,
+        dm_subset: Dataset,
         transforms: Transforms | None = None,
         max_refetch: int = 1000,
         stack_images: bool = True,
@@ -184,15 +181,15 @@ class OTXDataset(TorchDataset):
         if isinstance(self.transforms, CPUAugmentationPipeline):
             return self.transforms(entity)
 
-        # Legacy path: Compose
+        # Compose
         if isinstance(self.transforms, Compose):
             return self.transforms(entity)
 
-        # Legacy path: Iterable of transforms
+        # Iterable of transforms
         if isinstance(self.transforms, Iterable):
             return self._iterable_transforms(entity)
 
-        # Legacy path: Single callable
+        # Single callable
         if callable(self.transforms):
             return self.transforms(entity)
         return None
@@ -204,8 +201,6 @@ class OTXDataset(TorchDataset):
         results = item
         for transform in self.transforms:
             results = transform(results)
-            # MMCV transform can produce None. Please see
-            # https://github.com/open-mmlab/mmengine/blob/26f22ed283ae4ac3a24b756809e5961efe6f9da8/mmengine/dataset/base_dataset.py#L59-L66
             if results is None:
                 return None
 

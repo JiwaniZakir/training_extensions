@@ -547,19 +547,6 @@ class OTXDetectionModel(OTXModel):
             )
 
         return [1] * 10
-
-    @staticmethod
-    @torch.no_grad()
-    def _apply_batch_augmentations(
-        augmentations_pipeline: AugmentationSequential | Compose | None, batch: OTXDataBatch  # noqa: F821
-    ) -> None:
-        """Apply batch augmentations to detection data."""
-        if augmentations_pipeline is not None:
-            # Convert bounding boxes to Kornia Boxes [N, 4, 2]
-            kornia_boxes = Boxes.from_tensor(batch.bboxes, mode="xyxy")
-            batch.images, kornia_boxes = augmentations_pipeline(batch.images, kornia_boxes)
-            batch.bboxes = kornia_boxes.to_tensor(mode="xyxy")
-
     @property
     def _default_preprocessing_params(self) -> DataInputParams | dict[str, DataInputParams]:
         return DataInputParams(input_size=(640, 640), mean=(0.0, 0.0, 0.0), std=(1.0, 1.0, 1.0))

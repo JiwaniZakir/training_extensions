@@ -206,35 +206,6 @@ class OTXKeypointDetectionModel(OTXModel):
             confidence_threshold=self.hparams.get("best_confidence_threshold", None),
         )
 
-    @staticmethod
-    @torch.no_grad()
-    def _apply_batch_augmentations(
-        augmentations_pipeline: AugmentationSequential | Compose | None, batch: OTXDataBatch  # noqa: F821
-    ) -> None:
-        """Apply batch augmentations to keypoint data."""
-        if augmentations_pipeline is not None:
-            stacked_kps = torch.stack(batch.keypoints)
-            # Apply augmentations
-            batch.images, augmented_kps = augmentations_pipeline(batch.images, stacked_kps[:, :, :2])
-            stacked_kps[:, :, :2] = augmented_kps
-            h, w = batch.images.shape[-2:]
-            # Compute visible mask. Keypoints should be visible if they are inside the image (>=0, x<=w, y<=h)
-            visible_mask = (
-                (augmented_kps > 0).all(axis=2) * (augmented_kps[:, :, 0] <= w) * (augmented_kps[:, :, 1] <= h)
-            )
-            stacked_kps[:, :, 2] = stacked_kps[:, :, 2] * visible_mask
-            # Update visible keypoints with augmented values
-            batch.keypoints = list(stacked_kps)
-
-    @property
-    def _default_train_transforms(self):  # noqa: ANN202, F821
-        """Return default GPU augmentations for keypoint detection."""
-        return AugmentationSequential(
-            kornia.augmentation.Normalize(self.data_input_params.mean, self.data_input_params.std),
-            data_keys=["input", "keypoints"],
-            keepdim=True,
-        )
-
     @property
     def _default_preprocessing_params(self) -> DataInputParams | dict[str, DataInputParams]:
         return DataInputParams(input_size=(512, 512), mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
