@@ -99,8 +99,8 @@ class RFDETR(OTXDetectionModel):
         multi_scale: bool = False,
         torch_compile: bool = False,
         tile_config: TileConfig = TileConfig(enable_tiler=False),
-        max_total_objects_per_batch: int | None = None,
-        gradient_checkpointing: bool = False,
+        max_total_objects_per_batch: int | None = 600,
+        gradient_checkpointing: bool = True,
     ) -> None:
         self.multi_scale = multi_scale
         self.max_total_objects_per_batch = max_total_objects_per_batch

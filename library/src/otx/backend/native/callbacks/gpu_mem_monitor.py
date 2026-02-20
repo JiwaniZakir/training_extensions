@@ -77,6 +77,7 @@ class GPUMemMonitor(Callback):
             trainer,
             pl_module,
         )
+        torch.cuda.empty_cache()
 
     def on_validation_batch_start(
         self,

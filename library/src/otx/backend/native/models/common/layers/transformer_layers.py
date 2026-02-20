@@ -1387,7 +1387,7 @@ def get_contrastive_denoising_training_group(
     num_denoising: int = 100,
     label_noise_ratio: float = 0.5,
     box_noise_scale: float = 1.0,
-    max_denoising_queries: int = 1000,
+    max_denoising_queries: int = 800,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, dict[str, torch.Tensor]] | tuple[None, None, None, None]:
     """Generate contrastive denoising training group with memory-efficient capping.
 
