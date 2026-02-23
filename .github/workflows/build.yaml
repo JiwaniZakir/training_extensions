@@ -150,19 +150,16 @@ jobs:
       - name: Get Docker image sizes
         working-directory: application/docker
         id: image-sizes
-        if: github.event_name == 'pull_request'
         run: |
-          mkdir -p image-sizes
-
-          echo "| Image | Size |" > image-sizes/${DEVICE}.md
-          echo "|-------|------|" >> image-sizes/${DEVICE}.md
+          echo "| Image | Size |"
+          echo "|-------|------|"
 
           for TAG in $TAGS ; do
             IMAGE="geti-tune-${DEVICE}:${TAG}"
             if docker image inspect "$IMAGE" >/dev/null 2>&1; then
               size_bytes=$(docker image inspect "$IMAGE" --format='{{.Size}}')
               size_readable=$(numfmt --to=si --format "%.2f" "$size_bytes")
-              echo "| $IMAGE | $size_readable |" >> image-sizes/${DEVICE}.md
+              echo "| $IMAGE | $size_readable |"
             fi
           done
         env:
