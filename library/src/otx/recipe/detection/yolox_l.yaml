@@ -63,7 +63,7 @@ overrides:
       - 640
       - 640
     train_subset:
-      batch_size: 8
+      batch_size: 6
       transforms:
         - class_path: otx.data.transform_libs.torchvision.MinIoURandomCrop
           enable: false

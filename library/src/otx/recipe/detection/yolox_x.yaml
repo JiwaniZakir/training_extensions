@@ -8,7 +8,7 @@ model:
     optimizer:
       class_path: torch.optim.SGD
       init_args:
-        lr: 0.001
+        lr: 0.00075
         momentum: 0.9
         weight_decay: 0.0001
 
@@ -61,7 +61,7 @@ overrides:
       - 640
       - 640
     train_subset:
-      batch_size: 4
+      batch_size: 3
       transforms:
         - class_path: otx.data.transform_libs.torchvision.MinIoURandomCrop
           enable: false
