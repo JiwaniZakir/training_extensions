@@ -52,7 +52,7 @@ jobs:
     if: needs.check_paths.outputs.run_workflow == 'true'
     strategy:
       matrix:
-        device: [cpu, xpu, gpu]
+        device: [cpu]
     permissions:
       contents: read
     steps:
@@ -157,8 +157,35 @@ jobs:
           for TAG in $TAGS ; do
             IMAGE="geti-tune-${DEVICE}:${TAG}"
             if docker image inspect "$IMAGE" >/dev/null 2>&1; then
+              echo "=== Debugging size for $IMAGE ==="
+              
+              # Method 1: docker inspect .Size
               size_bytes=$(docker image inspect "$IMAGE" --format='{{.Size}}')
               size_readable=$(numfmt --to=si --format "%.2f" "$size_bytes")
+              echo "Method 1 (inspect .Size): $size_bytes bytes = $size_readable"
+              
+              # Method 2: docker inspect .VirtualSize
+              virtual_size=$(docker image inspect "$IMAGE" --format='{{.VirtualSize}}')
+              virtual_readable=$(numfmt --to=si --format "%.2f" "$virtual_size")
+              echo "Method 2 (inspect .VirtualSize): $virtual_size bytes = $virtual_readable"
+              
+              # Method 3: docker images command
+              images_size=$(docker images "$IMAGE" --format "{{.Size}}")
+              echo "Method 3 (docker images): $images_size"
+              
+              # Method 4: docker system df
+              echo "Method 4 (docker system df):"
+              docker system df --format "table {{.Type}}\t{{.TotalCount}}\t{{.Size}}\t{{.Reclaimable}}" | grep -E "Images|TYPE"
+              
+              # Method 5: Sum of layer sizes
+              echo "Method 5 (layer sizes):"
+              layer_sizes=$(docker image inspect "$IMAGE" --format='{{range .RootFS.Layers}}{{println .}}{{end}}' | while read layer; do
+                docker image inspect "$IMAGE" --format='{{json .RootFS}}' | grep -o "$layer" >/dev/null 2>&1
+              done)
+              total_layers=$(docker image inspect "$IMAGE" --format='{{len .RootFS.Layers}}')
+              echo "Total layers: $total_layers"
+              
+              echo "---"
               echo "| $IMAGE | $size_readable |"
             fi
           done
@@ -182,16 +209,16 @@ jobs:
         env:
           TAGS: ${{ steps.meta.outputs.tags }}
 
-      - name: Upload image as artifact
-        # Image upload is heavy and slow, so we skip it on PRs
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        uses: ishworkh/container-image-artifact-upload@5d71a2417f0576fa11fe770fb04ece58c4587714
-        with:
-          image: "geti-tune-${{ matrix.device }}:${{ steps.first-tag.outputs.tag }}"
-          retention_days: "3"
-        continue-on-error: true
-        env:
-          FIRST_TAG: ${{ steps.first-tag.outputs.tag }}
+  #      - name: Upload image as artifact
+  #        # Image upload is heavy and slow, so we skip it on PRs
+  #        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+  #        uses: ishworkh/container-image-artifact-upload@5d71a2417f0576fa11fe770fb04ece58c4587714
+  #        with:
+  #          image: "geti-tune-${{ matrix.device }}:${{ steps.first-tag.outputs.tag }}"
+  #          retention_days: "3"
+  #        continue-on-error: true
+  #        env:
+  #          FIRST_TAG: ${{ steps.first-tag.outputs.tag }}
 
   comment-sizes:
     name: Comment PR with all image sizes
