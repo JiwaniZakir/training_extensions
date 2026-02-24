@@ -170,21 +170,7 @@ jobs:
               # Method 2: docker images command
               images_size=$(docker images "$IMAGE" --format "{{.Size}}")
               echo "Method 2 (docker images): $images_size"
-              
-              # Method 3: docker system df
-              echo "Method 3 (docker system df):"
-              docker system df --format "table {{.Type}}\t{{.TotalCount}}\t{{.Size}}\t{{.Reclaimable}}" | grep -E "Images|TYPE"
-              
-              # Method 4: Full docker image ls output
-              echo ""
-              echo "Method 4 (docker image ls - full output):"
-              docker image ls "$IMAGE"
-              
-              # Method 5: Full docker image inspect output
-              echo ""
-              echo "Method 5 (docker image inspect - full JSON output):"
-              docker image inspect "$IMAGE"
-              
+
               echo "---"
               echo "| $IMAGE | $size_readable |"
             fi
