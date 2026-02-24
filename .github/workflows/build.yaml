@@ -164,26 +164,13 @@ jobs:
               size_readable=$(numfmt --to=si --format "%.2f" "$size_bytes")
               echo "Method 1 (inspect .Size): $size_bytes bytes = $size_readable"
               
-              # Method 2: docker inspect .VirtualSize
-              virtual_size=$(docker image inspect "$IMAGE" --format='{{.VirtualSize}}')
-              virtual_readable=$(numfmt --to=si --format "%.2f" "$virtual_size")
-              echo "Method 2 (inspect .VirtualSize): $virtual_size bytes = $virtual_readable"
-              
-              # Method 3: docker images command
+              # Method 2: docker images command
               images_size=$(docker images "$IMAGE" --format "{{.Size}}")
-              echo "Method 3 (docker images): $images_size"
+              echo "Method 2 (docker images): $images_size"
               
-              # Method 4: docker system df
-              echo "Method 4 (docker system df):"
+              # Method 3: docker system df
+              echo "Method 3 (docker system df):"
               docker system df --format "table {{.Type}}\t{{.TotalCount}}\t{{.Size}}\t{{.Reclaimable}}" | grep -E "Images|TYPE"
-              
-              # Method 5: Sum of layer sizes
-              echo "Method 5 (layer sizes):"
-              layer_sizes=$(docker image inspect "$IMAGE" --format='{{range .RootFS.Layers}}{{println .}}{{end}}' | while read layer; do
-                docker image inspect "$IMAGE" --format='{{json .RootFS}}' | grep -o "$layer" >/dev/null 2>&1
-              done)
-              total_layers=$(docker image inspect "$IMAGE" --format='{{len .RootFS.Layers}}')
-              echo "Total layers: $total_layers"
               
               echo "---"
               echo "| $IMAGE | $size_readable |"
