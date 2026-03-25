@@ -36,4 +36,32 @@ describe('GalleryUploadDropZone', () => {
 
         expect(mockOnFilesSelected).toHaveBeenCalledWith([mockFile]);
     });
+
+    it('uploads dropped files when Windows-style drop data exposes files without the Files type', () => {
+        const mockOnFilesSelected = vi.fn();
+        const mockFile = new File(['file content'], 'test-image.jpg', {
+            type: 'image/jpeg',
+            lastModified: Date.now(),
+        });
+
+        render(<GalleryUploadDropZone isEmpty onFilesSelected={mockOnFilesSelected} />);
+
+        const dropZone = screen.getByTestId('dataset-media-drop-zone');
+
+        fireEvent.drop(dropZone, { dataTransfer: { files: [mockFile], types: [] } });
+
+        expect(mockOnFilesSelected).toHaveBeenCalledWith([mockFile]);
+    });
+
+    it('shows drag-over state when dragged items are file items even without files populated yet', () => {
+        const mockOnFilesSelected = vi.fn();
+
+        render(<GalleryUploadDropZone isEmpty onFilesSelected={mockOnFilesSelected} />);
+
+        const dropZone = screen.getByTestId('dataset-media-drop-zone');
+
+        fireEvent.dragEnter(dropZone, { dataTransfer: { files: [], items: [{ kind: 'file' }], types: [] } });
+
+        expect(dropZone.className).toMatch(/dragOver/);
+    });
 });

@@ -26,7 +26,19 @@ const getAcceptedFiles = (files: FileList | null) => {
     });
 };
 
-const hasDraggedFiles = (event: DragEvent<HTMLElement>) => Array.from(event.dataTransfer.types).includes('Files');
+const hasDraggedFiles = (event: DragEvent<HTMLElement>) => {
+    const { dataTransfer } = event;
+
+    if (dataTransfer.files.length > 0) {
+        return true;
+    }
+
+    if (Array.from(dataTransfer.items).some((item) => item.kind === 'file')) {
+        return true;
+    }
+
+    return Array.from(dataTransfer.types).includes('Files');
+};
 
 export const useMediaFileSelection = ({ onFilesSelected }: UseMediaFileSelectionOptions) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -92,13 +104,14 @@ export const useMediaFileSelection = ({ onFilesSelected }: UseMediaFileSelection
 
     const handleDrop = useCallback(
         (event: DragEvent<HTMLElement>) => {
+            event.preventDefault();
+            dragDepthRef.current = 0;
+            setIsDragOver(false);
+
             if (!hasDraggedFiles(event)) {
                 return;
             }
 
-            event.preventDefault();
-            dragDepthRef.current = 0;
-            setIsDragOver(false);
             notifySelectedFiles(event.dataTransfer.files);
         },
         [notifySelectedFiles]
