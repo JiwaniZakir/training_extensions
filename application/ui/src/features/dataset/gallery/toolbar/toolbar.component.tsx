@@ -19,7 +19,6 @@ import {
 import { AddMediaButton } from '../../../../components/add-media-button/add-media-button.component';
 import type { Media } from '../../../../constants/shared-types';
 import { TrainModel } from '../../../models/train-model/train-model.component';
-import { useMediaUpload } from '../../api/use-media-upload';
 import { DeleteMediaItem } from '../../gallery/delete-media-item/delete-media-item.component';
 import { ImportExport } from '../../import-export/import-export.component';
 import { useSelectedData } from '../../providers/selected-data-provider.component';
@@ -29,9 +28,11 @@ import { toggleMultipleSelection } from './util';
 
 type ToolbarProps = {
     items: Media[];
+    onFilesSelected: (files: File[]) => void;
     viewMode: ViewModes;
     setViewMode: Dispatch<SetStateAction<ViewModes>>;
     onFilter: (status: FilterByStatusKey) => void;
+    isUploadDisabled?: boolean;
 };
 
 type AnnotateButtonProps = {
@@ -47,10 +48,16 @@ const AnnotateButton = ({ isDisabled, onClick }: AnnotateButtonProps) => {
     );
 };
 
-export const Toolbar = ({ items, viewMode, setViewMode, onFilter }: ToolbarProps) => {
+export const Toolbar = ({
+    items,
+    onFilesSelected,
+    viewMode,
+    setViewMode,
+    onFilter,
+    isUploadDisabled = false,
+}: ToolbarProps) => {
     const { onSelectedMediaItemChange } = useSelectDatasetItem();
     const { selectedKeys, setSelectedKeys, toggleSelectedKeys } = useSelectedData();
-    const { uploadMedia, uploadProgress } = useMediaUpload();
 
     const totalSelectedElements = selectedKeys instanceof Set ? selectedKeys.size : 0;
     const hasSelectedElements = totalSelectedElements > 0;
@@ -67,11 +74,8 @@ export const Toolbar = ({ items, viewMode, setViewMode, onFilter }: ToolbarProps
                 <Heading level={1}>Dataset</Heading>
                 <ButtonGroup UNSAFE_style={{ gap: dimensionValue('size-125') }}>
                     <ImportExport />
-
-                    <AddMediaButton onFilesSelected={uploadMedia} isDisabled={uploadProgress.isUploading} />
-
+                    <AddMediaButton onFilesSelected={onFilesSelected} isDisabled={isUploadDisabled} />
                     <TrainModel />
-
                     <AnnotateButton
                         isDisabled={items.at(0) === undefined}
                         onClick={items.at(0) === undefined ? undefined : () => onSelectedMediaItemChange(items[0])}
@@ -106,8 +110,8 @@ export const Toolbar = ({ items, viewMode, setViewMode, onFilter }: ToolbarProps
 
                             {/* 
                                 TODO: In the future we will have a single endpoint to accept/decline
-                                    multiple media items at once instead of sending multiple requests in a loop.
-                                    Once we have that, we can reenable these buttons.
+                                multiple media items at once instead of sending multiple requests in a loop.
+                                Once we have that, we can reenable these buttons.
                             */}
                             {/* <Button variant={'accent'} onPress={handleAccept}>
                                 Accept

@@ -10,21 +10,8 @@ import type { Media } from '../../../../constants/shared-types';
 import { SelectedDataProvider } from '../../providers/selected-data-provider.component';
 import { Toolbar } from './toolbar.component';
 
-const uploadMediaMock = vi.fn();
+const onFilesSelectedMock = vi.fn();
 const onSelectedMediaItemChangeMock = vi.fn();
-
-vi.mock('../../api/use-media-upload', () => ({
-    useMediaUpload: () => ({
-        uploadMedia: uploadMediaMock,
-        uploadProgress: {
-            total: 0,
-            completed: 0,
-            succeeded: 0,
-            failed: 0,
-            isUploading: false,
-        },
-    }),
-}));
 
 vi.mock('../hooks/use-select-dataset-item.hook', () => ({
     useSelectDatasetItem: () => ({
@@ -45,17 +32,23 @@ describe('Toolbar', () => {
     const renderToolbar = (items: Media[] = []) => {
         return render(
             <SelectedDataProvider>
-                <Toolbar items={items} viewMode={ViewModes.LARGE} setViewMode={vi.fn()} onFilter={vi.fn()} />
+                <Toolbar
+                    items={items}
+                    onFilesSelected={onFilesSelectedMock}
+                    viewMode={ViewModes.LARGE}
+                    setViewMode={vi.fn()}
+                    onFilter={vi.fn()}
+                />
             </SelectedDataProvider>
         );
     };
 
     beforeEach(() => {
-        uploadMediaMock.mockClear();
+        onFilesSelectedMock.mockClear();
         onSelectedMediaItemChangeMock.mockClear();
     });
 
-    it('delegates selected files to useMediaUpload', () => {
+    it('delegates selected files to the provided upload handler', () => {
         const file = new File(['file-content'], 'media-item.jpg', { type: 'image/jpeg' });
 
         renderToolbar();
@@ -63,7 +56,7 @@ describe('Toolbar', () => {
         const input = screen.getByLabelText(/Upload media files/);
         fireEvent.change(input, { target: { files: [file] } });
 
-        expect(uploadMediaMock).toHaveBeenCalledWith([file]);
+        expect(onFilesSelectedMock).toHaveBeenCalledWith([file]);
     });
 
     it('shows total images count when no items are selected', () => {
