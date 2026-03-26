@@ -13,7 +13,7 @@
         "windows": [
             {
                 "title": "Geti",
-                "width": 1600,
+                "width": 1400,
                 "height": 950,
                 "resizable": true,
                 "fullscreen": false
