@@ -14,6 +14,7 @@ from warnings import warn
 
 import yaml
 from jsonargparse import ArgumentParser, Namespace
+from loguru import logger
 
 from otx.backend.native.cli.utils import get_otx_root_path
 from otx.backend.native.models.base import DataInputParams, OTXModel
@@ -614,6 +615,7 @@ class GetiConfigConverter:
         if model_config_path.suffix != ".yaml":
             model_config_path = model_config_path / ".yaml"
         default_config = AutoConfigurator(model=model_config_path).config
+        logger.warning("[DBG] default_config: {}", default_config)
         if hyper_parameters:
             GetiConfigConverter._update_params(default_config, hyper_parameters)
         GetiConfigConverter._remove_unused_key(default_config)

@@ -212,6 +212,8 @@ class OTXTrainer(Execution[TrainingJobParams]):
             # Convert the configuration to the format adopted by OTX
             converter = GetiConfigConverter()
             otx_training_config = converter.convert(geti_training_config)
+            logger.warning("[DBG] Training config: {}", otx_training_config)
+            raise NotImplementedError("[DBG] Intentional failure for debugging purposes")
 
             return training_config, otx_training_config
 
@@ -412,7 +414,7 @@ class OTXTrainer(Execution[TrainingJobParams]):
         logger.info("Starting the training loop (model_id={})", model_id)
         train_kwargs = {"devices": [device.index]} if device.type is not DeviceType.CPU and device.index else {}
         otx_engine.train(
-            max_epochs=training_config["max_epochs"],
+            max_epochs=1,  # training_config["max_epochs"],
             precision=training_config["precision"],
             callbacks=callbacks_list,
             **train_kwargs,  # pyrefly: ignore[bad-argument-type]

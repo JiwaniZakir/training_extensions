@@ -107,6 +107,7 @@ class AutoConfigurator:
                 model_config_path = recipe_list[0]
             else:
                 model_config_path = model
+            logger.warning(f"[DBG] model_config_path: {model_config_path!s}")
             if not Path(model_config_path).exists():
                 msg = f"Model config path {model} does not exist."
                 raise FileNotFoundError(msg)
@@ -165,8 +166,10 @@ class AutoConfigurator:
             if task is None:
                 msg = "Either config_path or task must be provided."
                 raise ValueError(msg)
+            logger.warning(f"[DBG] No config path provided. Using default config for task {task}.")
             config_path = DEFAULT_CONFIG_PER_TASK[task]
-
+        else:
+            logger.warning(f"[DBG] Config path provided: {config_path}. Using the provided config.")
         return get_configuration(config_path)
 
     def get_datamodule(self, data_root: PathLike | None = None) -> OTXDataModule:
